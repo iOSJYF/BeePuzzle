@@ -1,5 +1,5 @@
 #BeePuzzle<br>
-蜜蜂拼图游戏
+蜜蜂拼图
 ====
 
 项目使用了cocospod，又设置了忽略文件，所以下载的时候请自行 pod install 一下 <br>
