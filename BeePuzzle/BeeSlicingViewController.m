@@ -132,7 +132,6 @@
     CGPoint point = [pan locationInView:self.collectionView];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
     
-    static UIView *snapshot = nil;             //创建cell的一个快照
     static NSIndexPath *sourceIndexPath = nil; //手势开始的cell的indexPath
     
     switch (state) {
@@ -141,52 +140,27 @@
             if (indexPath)
             {
                 sourceIndexPath = indexPath;
-                UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-                //获取当前cell的快照 即手势起始拖动的那个cell
-                //                snapshot = [self customSnapshoFromView:cell];
-                
-                __block CGPoint center = cell.center;
-                snapshot.center = center;
-                snapshot.alpha = 0.0;
-                //向collectionView上添加快照视图
-                [self.collectionView addSubview:snapshot];
-                //添加一个动画效果
-                [UIView animateWithDuration:0.25 animations:^{
-                    
-                    snapshot.center = point;
-                    snapshot.transform = CGAffineTransformMakeScale(1.05, 1.05);
-                    snapshot.alpha = 0.98;
-                    
-                } completion:nil];
             }
             break;
         }
             
         case UIGestureRecognizerStateChanged:
         {
-            snapshot.center = point;
             
             //如果改变位置的cell存在 且与源cell位置不同 且2个cell处于同一个分区
             if (indexPath && ![indexPath isEqual:sourceIndexPath] && indexPath.section == sourceIndexPath.section)
             {
                 
-                //                if (sourceIndexPath.section == 0)
-                //                {
-                //                    [arr1 exchangeObjectAtIndex:indexPath.row withObjectAtIndex:sourceIndexPath.row];
-                //                }
-                //                else
-                //                {
-                //                    [arr2 exchangeObjectAtIndex:indexPath.row withObjectAtIndex:sourceIndexPath.row];
-                //                }
-                
                 [self.collectionView moveItemAtIndexPath:sourceIndexPath toIndexPath:indexPath];
                 
+                // 处理向下拖拽顺序错乱
                 for (int i = (int)indexPath.row-1; i > (int)sourceIndexPath.row; i --) {
                     NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
                     NSIndexPath *index2 = [NSIndexPath indexPathForRow:i-1 inSection:0];
                     [self.collectionView moveItemAtIndexPath:index toIndexPath:index2];
                 }
                 
+                // 处理向上拖拽顺序错乱
                 for (int i = (int)indexPath.row+1; i < (int)sourceIndexPath.row; i ++) {
                     NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
                     NSIndexPath *index2 = [NSIndexPath indexPathForRow:i+1 inSection:0];
@@ -199,51 +173,24 @@
                 
                 [self.sxArray removeObjectAtIndex:sourceIndexPath.row];
                 [self.sxArray insertObject:[NSNumber numberWithInt:a] atIndex:indexPath.row];
-                
                 sourceIndexPath = indexPath;
-                
-                
+
             }
             break;
         }
             
         default:
         {
-            //从视图上移除快照
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:sourceIndexPath];
-            [UIView animateWithDuration:0.25 animations:^{
-                
-                snapshot.center = cell.center;
-                snapshot.transform = CGAffineTransformIdentity;
-                snapshot.alpha = 0.0;
-                cell.backgroundColor = [UIColor redColor];
-                
-            } completion:^(BOOL finished) {
-                
-                [snapshot removeFromSuperview];
-                snapshot = nil;
-                
-            }];
             sourceIndexPath = nil;
-            
             if ([self.sxArray isEqualToArray: self.TheNumArray]) {
-                NSLog(@"成功");
-                
                 [self doTheSuccess];
-                
             }
-            
-            
-            
-            
             break;
         }
     }
-    
-    
-    
 }
 
+#pragma mark - 生成随机数组
 -(NSArray *)randomArray
 {
     NSMutableArray *startArray=[[NSMutableArray alloc]initWithArray:self.cutImageArray];
