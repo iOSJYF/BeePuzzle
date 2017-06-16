@@ -178,9 +178,24 @@
                 //                {
                 //                    [arr2 exchangeObjectAtIndex:indexPath.row withObjectAtIndex:sourceIndexPath.row];
                 //                }
+                
                 [self.collectionView moveItemAtIndexPath:sourceIndexPath toIndexPath:indexPath];
                 
-                NSInteger a = [self.sxArray[sourceIndexPath.row]intValue];
+                for (int i = (int)indexPath.row-1; i > (int)sourceIndexPath.row; i --) {
+                    NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
+                    NSIndexPath *index2 = [NSIndexPath indexPathForRow:i-1 inSection:0];
+                    [self.collectionView moveItemAtIndexPath:index toIndexPath:index2];
+                }
+                
+                for (int i = (int)indexPath.row+1; i < (int)sourceIndexPath.row; i ++) {
+                    NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:0];
+                    NSIndexPath *index2 = [NSIndexPath indexPathForRow:i+1 inSection:0];
+                    [self.collectionView moveItemAtIndexPath:index toIndexPath:index2];
+                }
+                
+                
+                
+                int a = [self.sxArray[sourceIndexPath.row]intValue];
                 
                 [self.sxArray removeObjectAtIndex:sourceIndexPath.row];
                 [self.sxArray insertObject:[NSNumber numberWithInt:a] atIndex:indexPath.row];
@@ -239,7 +254,7 @@
         resultArray[i]=startArray[t];
         [startArray removeObjectAtIndex:t];
         NSInteger theIndex = [self.cutImageArray indexOfObject:resultArray[i]];
-        [self.sxArray addObject:[NSNumber numberWithInt:theIndex]];
+        [self.sxArray addObject:[NSNumber numberWithInteger:theIndex]];
         
     }
         
