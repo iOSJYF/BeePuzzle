@@ -5,8 +5,8 @@
 项目使用了cocospod，又设置了忽略文件，所以下载的时候请自行 pod install 一下 <br>
 而且采用了之前蜜蜂的图片封装，详见 [beeCustomPhoto](https://github.com/iOSJYF/beeCustomPhoto)   <br>
 首先来一波效果图: <br>
-![gif](https://github.com/iOSJYF/BeePuzzle/raw/master/xiaoguo.gif)<br>
-
+![gif](https://github.com/iOSJYF/BeePuzzle/raw/master/xiaoguo.gif)   <br>    
+![gif](https://github.com/iOSJYF/BeePuzzle/raw/master/xiaoguo2.gif)  <br>
 <br>
 拼图默认是正方形的裁剪，所以一开始进去截图比例是1：1，默认横竖切割数一样，难度对应切割分别为3、4、5。<br>
 
