@@ -76,17 +76,17 @@
     return _catImageView;
 }
 
-- (UIImageView *)tiaotiaoImageView
-{
-    if (!_tiaotiaoImageView) {
-        _tiaotiaoImageView = [[UIImageView alloc]init];
-        NSString  *filePath = [[NSBundle bundleWithPath:[[NSBundle mainBundle] bundlePath]] pathForResource:@"tiaotiao.gif" ofType:nil];
-        NSData  *imageData = [NSData dataWithContentsOfFile:filePath];
-        _tiaotiaoImageView.image = [UIImage sd_animatedGIFWithData:imageData];
-        
-    }
-    return _tiaotiaoImageView;
-}
+//- (UIImageView *)tiaotiaoImageView
+//{
+//    if (!_tiaotiaoImageView) {
+//        _tiaotiaoImageView = [[UIImageView alloc]init];
+//        NSString  *filePath = [[NSBundle bundleWithPath:[[NSBundle mainBundle] bundlePath]] pathForResource:@"tiaotiao.gif" ofType:nil];
+//        NSData  *imageData = [NSData dataWithContentsOfFile:filePath];
+//        _tiaotiaoImageView.image = [UIImage sd_animatedGIFWithData:imageData];
+//        
+//    }
+//    return _tiaotiaoImageView;
+//}
 
 
 - (UILabel *)titleLabel
@@ -181,7 +181,7 @@
 {
     [self.view addSubview:self.catImageView];
     [self.catImageView startAnimating];
-    [self.view addSubview:self.tiaotiaoImageView];
+//    [self.view addSubview:self.tiaotiaoImageView];
     [self.view addSubview:self.titleLabel];
     [self.view addSubview:self.kouHaoImageView];
     [self.view addSubview:self.selectTitleView];
@@ -209,11 +209,11 @@
         make.height.mas_equalTo((ScreenWidth-100)/1.5);
     }];
     
-    [self.tiaotiaoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.kouHaoImageView.mas_top).offset(0);
-        make.width.height.equalTo(@80);
-        make.right.mas_equalTo(25);
-    }];
+//    [self.tiaotiaoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(self.kouHaoImageView.mas_top).offset(0);
+//        make.width.height.equalTo(@80);
+//        make.right.mas_equalTo(25);
+//    }];
     
     [self.selectTitleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.kouHaoImageView.mas_bottom).offset(20);
@@ -288,6 +288,10 @@
 //    
 //    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:(index-2)] animated:YES];
 
+    NSData *data = [self beeCustomPic:image ToCustomSize:CGSizeMake(750, 1334)];
+    UIImage *ysImg = [UIImage imageWithData:data];
+    
+    
     [self.navigationController popToRootViewControllerAnimated:NO];
     
     switch (self.theTag) {
@@ -297,7 +301,7 @@
             beeVC.name = @"candy";
             beeVC.colums = beeVC.rows = 3;
             beeVC.title = @"简单";
-            beeVC.image = image;
+            beeVC.image = ysImg;
             [self.navigationController pushViewController:beeVC animated:YES];
 
         }
@@ -308,7 +312,7 @@
             beeVC.name = @"xiuxiu";
             beeVC.colums = beeVC.rows = 4;
             beeVC.title = @"困难";
-            beeVC.image = image;
+            beeVC.image = ysImg;
             [self.navigationController pushViewController:beeVC animated:YES];
 
         }
@@ -319,7 +323,7 @@
             beeVC.name = @"Bee";
             beeVC.colums = beeVC.rows = 5;
             beeVC.title = @"噩梦";
-            beeVC.image = image;
+            beeVC.image = ysImg;
             [self.navigationController pushViewController:beeVC animated:YES];
         }
             break;
@@ -329,5 +333,29 @@
     
     
 }
+
+#pragma mark - 压缩图片至指定大小
+- (NSData *)beeCustomPic:(UIImage *)image ToCustomSize:(CGSize)size
+{
+
+    CGSize mysize = size;
+    CGSize resize = image.size;
+    if(resize.width > mysize.width){
+        resize = CGSizeMake(mysize.width, mysize.width/resize.width * resize.height);
+    }
+    if(resize.height > mysize.height){
+        resize = CGSizeMake(mysize.height/resize.height * resize.width, mysize.height);
+    }
+    if (resize.width <= 0 || resize.height <= 0) return nil;
+    UIGraphicsBeginImageContextWithOptions(resize, NO, image.scale);
+    [image drawInRect:CGRectMake(0, 0, resize.width, resize.height)];
+    UIImage *newimage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *data = UIImageJPEGRepresentation(newimage, 1);
+    return data;
+    
+}
+
+
 
 @end

@@ -256,7 +256,7 @@
         int row=i/kColumns;
         int column=i%kColumns;
         
-        CGImageRef imageRef=CGImageCreateWithImageInRect(image.CGImage, CGRectMake(column*image.size.width*2/kColumns, row*image.size.height*2/kRows, image.size.width*2/kColumns, image.size.height*2/kRows));
+        CGImageRef imageRef=CGImageCreateWithImageInRect(image.CGImage, CGRectMake(column*image.size.width/kColumns, row*image.size.height/kRows, image.size.width/kColumns, image.size.height/kRows));
         UIImage *cutImage=[UIImage imageWithCGImage:imageRef];
         [array addObject:cutImage];
         

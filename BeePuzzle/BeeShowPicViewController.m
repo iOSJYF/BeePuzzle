@@ -104,15 +104,15 @@
     }];
     
     
-    [self.view addSubview:self.keepMoving];
-    [self.keepMoving mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(successImg.mas_bottom).offset(60);
-        make.left.mas_equalTo(10);
-    }];
+//    [self.view addSubview:self.keepMoving];
+//    [self.keepMoving mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(successImg.mas_bottom).offset(60);
+//        make.left.mas_equalTo(10);
+//    }];
     
     
     [self.view addSubview:self.runImg];
-    self.runImg.frame = CGRectMake(-100, 415, 250, 140);
+    self.runImg.frame = CGRectMake(-100, ScreenWidth+100, 250, 140);
     
     [self performSelector:@selector(dosomething) withObject:nil afterDelay:1];
     
@@ -125,7 +125,7 @@
 - (void)dosomething
 {
     [UIView animateWithDuration:10 animations:^{
-        self.runImg.frame = CGRectMake(ScreenWidth-180, 415, 250, 140);
+        self.runImg.frame = CGRectMake(ScreenWidth-180, ScreenWidth+100, 250, 140);
     }];
     
     
